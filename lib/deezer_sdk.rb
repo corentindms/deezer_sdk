@@ -5,7 +5,7 @@ require "deep_merge"
 module DeezerSdk
   class Error < StandardError; end
 
-  class DeezerClient
+  class Client
     include HTTParty
     base_uri 'https://api.deezer.com'
 

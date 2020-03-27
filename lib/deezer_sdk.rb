@@ -42,7 +42,7 @@ module DeezerSdk
         }
       }
 
-      post("/playlist/#{playlist_id}/tracks", options)
+      post("/playlist/#{playlist_id}/tracks", options).parsed_response
     end
 
     def find_track(id)

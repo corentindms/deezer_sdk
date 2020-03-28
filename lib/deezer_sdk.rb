@@ -16,7 +16,7 @@ module DeezerSdk
     end
 
     def playlists
-      get("/user/me/playlists")["data"]
+      get_paginated("/user/me/playlists") { |response| response["data"] }
     end
 
     def find_playlist(id)

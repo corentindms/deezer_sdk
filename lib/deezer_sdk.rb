@@ -32,7 +32,7 @@ module DeezerSdk
     end
 
     def playlist_tracks(playlist_id)
-      get("/playlist/#{playlist_id}/tracks")["data"]
+      get_paginated("/playlist/#{playlist_id}/tracks") { |response| response["data"] }
     end
 
     def add_tracks_to_playlist(playlist_id, track_ids)
@@ -72,6 +72,26 @@ module DeezerSdk
 
     def get(path, options = {})
       self.class.get(path, options.deep_merge(base_options))
+    end
+
+    def get_paginated(path, accum = [], &block)
+      loop do
+        response = get(path).parsed_response
+        accum += yield(response)
+
+        next_url = next_url(response)
+        break unless next_url
+
+        path = next_url
+      end
+
+      accum
+    end
+
+    def next_url(response)
+      return nil unless response["next"]
+
+      response["next"].gsub(self.class.base_uri, '')
     end
 
     def post(path, options = {})
